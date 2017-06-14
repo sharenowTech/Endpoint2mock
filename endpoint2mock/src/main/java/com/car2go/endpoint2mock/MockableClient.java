@@ -7,19 +7,32 @@ import retrofit.client.Client;
 import retrofit.client.Request;
 import retrofit.client.Response;
 
+/**
+ * Client which either performs request to a real endpoint or if request is annotated with
+ * {@link MockedEndpoint} calls the mock endpoint (assuming that it is hosted somewhere).
+ */
 public class MockableClient implements Client {
 
+    private final Registry registry;
     private final Client realClient;
     private final Client mockClient;
     private final BooleanFunction mockWhenFunction;
 
+    /**
+     * Creates builder for {@link MockableClient}.
+     *
+     * @param mockEndpointUrl URL of the endpoint which will be used instead of real URL for mocked
+     *                        requests.
+     */
     public static MockableClient.Builder build(String mockEndpointUrl) {
         return new Builder(mockEndpointUrl);
     }
 
-    MockableClient(Client realClient,
+    MockableClient(Registry registry,
+                   Client realClient,
                    Client mockClient,
                    BooleanFunction mockWhenFunction) {
+        this.registry = registry;
         this.realClient = realClient;
         this.mockClient = mockClient;
         this.mockWhenFunction = mockWhenFunction;
@@ -27,9 +40,20 @@ public class MockableClient implements Client {
 
     @Override
     public Response execute(Request request) throws IOException {
-        return realClient.execute(request);
+        if (shouldMockRequest(request)) {
+            return mockClient.execute(request);
+        } else {
+            return realClient.execute(request);
+        }
     }
 
+    private boolean shouldMockRequest(Request request) {
+        return registry.isInRegistry(request.getUrl()) && mockWhenFunction.call();
+    }
+
+    /**
+     * Builder for {@link MockableClient}.
+     */
     public static class Builder {
 
         private final String mockEndpointUrl;
@@ -74,6 +98,7 @@ public class MockableClient implements Client {
             }
 
             return new MockableClient(
+                    new Registry(),
                     realClient,
                     new ReplaceEndpointClient(mockEndpointUrl, realClient),
                     mockWhenFunction
