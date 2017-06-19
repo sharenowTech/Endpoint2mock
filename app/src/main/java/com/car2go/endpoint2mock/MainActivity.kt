@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
 
         githubApi = RestAdapter.Builder()
                 .setClient(
-                        MockableClient.build("http://127.0.0.1")   // Assuming that you have something running at this URL
+                        MockableClient.build("http://${BuildConfig.BUILD_HOST_ADDRESS}")   // Assuming that you have something running at this URL
                                 .mockWhen { mockToggle.isChecked }
                                 .build()
                 )
