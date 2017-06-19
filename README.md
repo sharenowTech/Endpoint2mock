@@ -75,6 +75,14 @@ You can check [json-server](https://github.com/car2go/Endpoint2mock/tree/master/
 
 And you are ready to go!
 
+## Proguard
+
+Just one line.
+
+```
+-keep class com.car2go.mock.MocksRegistry { *; }
+```
+
 ## License
 
 ```
