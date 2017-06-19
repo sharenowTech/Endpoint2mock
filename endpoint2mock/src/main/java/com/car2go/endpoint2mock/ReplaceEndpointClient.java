@@ -22,7 +22,25 @@ class ReplaceEndpointClient implements Client {
 
     @Override
     public Response execute(Request request) throws IOException {
-        return null;
+        return realClient.execute(
+                withReplacedEndpoint(request)
+        );
+    }
+
+    private Request withReplacedEndpoint(Request originalRequest) {
+        return new Request(
+                originalRequest.getMethod(),
+                replaceEndpoint(originalRequest.getUrl()),
+                originalRequest.getHeaders(),
+                originalRequest.getBody()
+        );
+    }
+
+    private String replaceEndpoint(String originalRequestUrl) {
+        return originalRequestUrl.replaceFirst(
+                "(http|https)://[^/]*",
+                newEndpoint
+        );
     }
 
 }
