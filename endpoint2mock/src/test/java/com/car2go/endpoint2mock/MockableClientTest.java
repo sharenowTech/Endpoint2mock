@@ -31,7 +31,7 @@ public class MockableClientTest {
     @Mock
     Client mockClient;
     @Mock
-    BooleanFunction mockWhenFunction;
+    BooleanFunction lookupFunction;
 
     MockableClient testee;
 
@@ -41,7 +41,7 @@ public class MockableClientTest {
                 registry,
                 realClient,
                 mockClient,
-                mockWhenFunction
+                lookupFunction
         );
     }
 
@@ -55,11 +55,11 @@ public class MockableClientTest {
 
         // Then
         verifyRealClientCalled();
-        verifyZeroInteractions(mockWhenFunction);
+        verifyZeroInteractions(lookupFunction);
     }
 
     @Test
-    public void callRealClient_WhenFalse_InRegistry() throws Exception {
+    public void callRealClient_WhenLookupFalse_InRegistry() throws Exception {
         // Given
         givenEndpointInRegistry(true);
         givenWhenFunctionReturns(false);
@@ -72,7 +72,7 @@ public class MockableClientTest {
     }
 
     @Test
-    public void callMockClient_WhenTrue_InRegistry() throws Exception {
+    public void callMockClient_WhenLookupTrue_InRegistry() throws Exception {
         // Given
         givenEndpointInRegistry(true);
         givenWhenFunctionReturns(true);
@@ -100,7 +100,7 @@ public class MockableClientTest {
     }
 
     private void givenWhenFunctionReturns(boolean result) {
-        given(mockWhenFunction.call())
+        given(lookupFunction.call())
                 .willReturn(result);
     }
 

@@ -21,7 +21,7 @@ class Registry {
         }
 
         try {
-            return registryClass.getDeclaredMethod("isMocked", registryClass);
+            return registryClass.getDeclaredMethod("isMocked", String.class);
         } catch (NoSuchMethodException e) {
             return null;
         }
