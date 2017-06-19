@@ -1,5 +1,12 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
+
+ext {
+    versionMajor = "1"
+    versionMinor = "0"
+    versionPatch = "1"
+}
+
 buildscript {
     ext.kotlin_version = '1.1.2-5'
     repositories {
@@ -14,7 +21,11 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+        mavenCentral()
     }
+
+    group = 'com.car2go'
+    version = "${versionMajor}.${versionMinor}.${versionPatch}"
 }
 
 task clean(type: Delete) {

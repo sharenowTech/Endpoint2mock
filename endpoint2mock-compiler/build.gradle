@@ -1,11 +1,13 @@
 apply plugin: 'java'
+apply plugin: 'maven'
+
+ext {
+    name = 'Endpoint2mock Compiler'
+    artifactId = 'endpoint2mock-compiler'
+}
 
 targetCompatibility = JavaVersion.VERSION_1_7
 sourceCompatibility = JavaVersion.VERSION_1_7
-
-repositories {
-    mavenCentral()
-}
 
 dependencies {
     compile project(':endpoint2mock')

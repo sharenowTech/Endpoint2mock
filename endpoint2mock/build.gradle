@@ -1,4 +1,10 @@
 apply plugin: 'java'
+apply plugin: 'maven'
+
+ext {
+    name = 'Endpoint2mock'
+    artifactId = 'endpoint2mock'
+}
 
 targetCompatibility = JavaVersion.VERSION_1_7
 sourceCompatibility = JavaVersion.VERSION_1_7
