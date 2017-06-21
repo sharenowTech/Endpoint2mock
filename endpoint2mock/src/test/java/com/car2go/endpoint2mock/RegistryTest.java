@@ -45,6 +45,21 @@ public class RegistryTest {
     }
 
     @Test
+    public void inRegistry_Yes_QueryParameters() throws Exception {
+        // Given
+        MocksRegistry.setRegistry(new HashSet<>(asList(
+                "/path3/path4",
+                "/path1/path2"
+        )));
+
+        // When
+        boolean result = testee.isInRegistry("http://example.com/path3/path4?someArg=a&otherArg=b");
+
+        // Then
+        assertTrue(result);
+    }
+
+    @Test
     public void inRegistry_No() throws Exception {
         // Given
         MocksRegistry.setRegistry(new HashSet<>(asList(

@@ -60,7 +60,11 @@ class Registry {
     private static boolean endpointMatches(String mockedEndpoint, String url) {
         String regEx = toRegEx(mockedEndpoint);
 
-        return url.matches(".*" + regEx);
+        return url.matches(".*" + regEx + queryArguments());
+    }
+
+    private static String queryArguments() {
+        return "(\\?.*)?";
     }
 
     private static String toRegEx(String mockedEndpoint) {
