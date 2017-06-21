@@ -77,25 +77,17 @@ public class MockAnnotationProcessor extends AbstractProcessor {
                     .initializer("new $T();", HashSet.class)
                     .build();
 
-            MethodSpec isMocked = MethodSpec.methodBuilder("isMocked")
+            MethodSpec getMockedEndpoints = MethodSpec.methodBuilder("getMockedEndpoints")
                     .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                    .returns(boolean.class)
-                    .addParameter(String.class, "url")
-                    .addCode(
-                            "for (Object mockedEndpoint : registry) {\n"
-                                    + "    if (url.endsWith((String) mockedEndpoint)) {\n"
-                                    + "        return true;\n"
-                                    + "    }\n"
-                                    + "}\n"
-                                    + "return false;\n"
-                    )
+                    .returns(Set.class)
+                    .addCode("return registry;\n")
                     .build();
 
             TypeSpec mocksRegistry = TypeSpec.classBuilder("MocksRegistry")
                     .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                     .addField(registryField)
                     .addStaticBlock(initializationBlockBuilder.build())
-                    .addMethod(isMocked)
+                    .addMethod(getMockedEndpoints)
                     .build();
 
             try {

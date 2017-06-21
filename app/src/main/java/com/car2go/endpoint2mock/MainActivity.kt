@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         requestButton.setOnClickListener {
             subscription?.unsubscribe()
 
-            subscription = githubApi.getCompanyRepositories()
+            subscription = githubApi.getRepositories("car2go")
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(

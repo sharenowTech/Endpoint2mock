@@ -16,13 +16,8 @@ public class MocksRegistry {
         MocksRegistry.registry.addAll(registry);
     }
 
-    public static boolean isMocked(String url) {
-        for (Object mockedEndpoint : registry) {
-            if (url.endsWith((String) mockedEndpoint)) {
-                return true;
-            }
-        }
-        return false;
+    public static Set getMockedEndpoints() {
+        return registry;
     }
 
 }

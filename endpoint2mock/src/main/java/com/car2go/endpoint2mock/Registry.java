@@ -1,6 +1,9 @@
 package com.car2go.endpoint2mock;
 
 import java.lang.reflect.Method;
+import java.util.Set;
+
+import static java.util.Collections.emptySet;
 
 /**
  * Checks whether URL should be mocked or not.
@@ -8,11 +11,11 @@ import java.lang.reflect.Method;
 class Registry {
 
     private final Class<?> generatedMocksRegistryClass;
-    private final Method isMockedMethod;
+    private final Method getMockedEndpointsMethod;
 
     public Registry() {
         generatedMocksRegistryClass = loadMocksRegistryClass();
-        isMockedMethod = loadIsMockedMethod(generatedMocksRegistryClass);
+        getMockedEndpointsMethod = loadIsMockedMethod(generatedMocksRegistryClass);
     }
 
     private static Method loadIsMockedMethod(Class<?> registryClass) {
@@ -21,7 +24,7 @@ class Registry {
         }
 
         try {
-            return registryClass.getDeclaredMethod("isMocked", String.class);
+            return registryClass.getDeclaredMethod("getMockedEndpoints");
         } catch (NoSuchMethodException e) {
             return null;
         }
@@ -39,14 +42,41 @@ class Registry {
      * @return {@code true} if given URL is in registry. {@code false} if it is not.
      */
     public boolean isInRegistry(String url) {
-        if (isMockedMethod == null) {
+        if (getMockedEndpointsMethod == null) {
             return false;
         }
 
+        Set<String> mockedEndpoints = getMockedEndpoints();
+
+        for (String endpoint : mockedEndpoints) {
+            if (endpointMatches(endpoint, url)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static boolean endpointMatches(String mockedEndpoint, String url) {
+        String regEx = toRegEx(mockedEndpoint);
+
+        return url.matches(".*" + regEx);
+    }
+
+    private static String toRegEx(String mockedEndpoint) {
+        return replacePathParameters(mockedEndpoint);
+    }
+
+    private static String replacePathParameters(String mockedEndpoint) {
+        return mockedEndpoint.replaceAll("\\{.*\\}", ".*");
+    }
+
+    @SuppressWarnings("unchecked")
+    private Set<String> getMockedEndpoints() {
         try {
-            return (boolean) isMockedMethod.invoke(generatedMocksRegistryClass, url);
+            return (Set<String>) getMockedEndpointsMethod.invoke(generatedMocksRegistryClass);
         } catch (Exception e) {
-            return false;
+            return emptySet();
         }
     }
 

@@ -30,6 +30,21 @@ public class RegistryTest {
     }
 
     @Test
+    public void inRegistry_Yes_PathParameters() throws Exception {
+        // Given
+        MocksRegistry.setRegistry(new HashSet<>(asList(
+                "/path3/{parameterA}/{parameterB}",
+                "/path1/path2"
+        )));
+
+        // When
+        boolean result = testee.isInRegistry("http://example.com/path1/path3/a/b");
+
+        // Then
+        assertTrue(result);
+    }
+
+    @Test
     public void inRegistry_No() throws Exception {
         // Given
         MocksRegistry.setRegistry(new HashSet<>(asList(

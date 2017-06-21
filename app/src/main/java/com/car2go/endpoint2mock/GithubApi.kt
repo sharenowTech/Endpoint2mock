@@ -1,6 +1,7 @@
 package com.car2go.endpoint2mock
 
 import retrofit.http.GET
+import retrofit.http.Path
 import rx.Observable
 
 data class Repository(val name: String)
@@ -16,8 +17,8 @@ interface GithubApi {
      * There is an annotation, so it can be mocked.
      */
     @MockedEndpoint
-    @GET("/users/car2go/repos")
-    fun getCompanyRepositories(): Observable<List<Repository>>
+    @GET("/users/{user}/repos")
+    fun getRepositories(@Path("user") user: String): Observable<List<Repository>>
 
     /**
      * @return [Observable] which emits list of repositories of a particular user.
