@@ -29,7 +29,7 @@ compile 'com.github.car2go.Endpoint2mock:endpoint2mock:1.1.0'
 kapt 'com.github.car2go.Endpoint2mock:endpoint2mock-compiler:1.1.0'
 
 // If you do not use Kotlin
-apt 'com.github.car2go.Endpoint2mock:endpoint2mock-compiler:1.1.0'
+annotationProcessor 'com.github.car2go.Endpoint2mock:endpoint2mock-compiler:1.1.0'
 ```
 
 ### Step three
