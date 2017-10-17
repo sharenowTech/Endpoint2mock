@@ -6,6 +6,10 @@ Sometimes when working with REST APIs there is a need to return some mock data. 
 
 Here is how it goes.
 
+## Retrofit 2
+
+This library is working only with Retrofit 1. For Retrofit 2 use the other version of the library: https://github.com/car2go/Endpoint2Mock2
+
 ## Add it to your project
 
 ### Step one
@@ -45,12 +49,6 @@ interface GithubApi {
     @MockedEndpoint
     @GET("/users/car2go/repos")
     fun getCompanyRepositories(): Observable<List<Repository>>
-
-    /**
-     * This endpoint will not be mocked and requests will be sent to the real server.
-     */
-    @GET("/users/dmitry-zaitsev/repos")
-    fun getUserRepositories(): Observable<List<Repository>>
 
 }
 ```
